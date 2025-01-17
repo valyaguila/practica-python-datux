@@ -1,5 +1,4 @@
-# Inicializamos una lista para almacenar los productos y sus ventas
-productos = []  # Lista de diccionarios con nombre y unidades vendidas
+productos = []  
 
 def mostrar_menu():
     print("\nMENÚ INTERACTIVO DE VENTAS")
@@ -62,7 +61,7 @@ def mostrar_productos():
         for i, producto in enumerate(productos, 1):
             print(f"{i}. {producto['nombre']}")
 
-# Mostrar el menú una sola vez y ejecutar la opción seleccionada
+
 mostrar_menu()
 opcion = input("\nSeleccione una opción (1-7): ")
 
