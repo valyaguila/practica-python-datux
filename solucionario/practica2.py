@@ -1,83 +1,106 @@
-productos = []  
+ventas=[
+    {
+        "fecha":"12-01-2023",
+        "producto":"Producto_A",
+        "cantidad":50,
+        "precio":45.00,
+        "promocion":True
+    },
+    {
+        "fecha":"11-01-2023",
+        "producto":"Producto_AX",
+        "cantidad":160,
+        "precio":12.00,
+        "promocion":False
+    },
+    {
+        "fecha":"10-01-2023",
+        "producto":"Producto_D",
+        "cantidad":20,
+        "precio":15.00,
+        "promocion":False
+    },
+    {
+        "fecha":"11-01-2023",
+        "producto":"Producto_C",
+        "cantidad":10,
+        "precio":140.00,
+        "promocion":False
+    },
+    {
+        "fecha":"11-01-2023",
+        "producto":"Producto_D",
+        "cantidad":1200,
+        "precio":1.00,
+        "promocion":True
+    }
+]
 
-def mostrar_menu():
-    print("\nMENÚ INTERACTIVO DE VENTAS")
-    print("1. Mostrar listado de ventas")
-    print("2. Añadir un producto")
-    print("3. Calcular suma total de ventas")
-    print("4. Calcular promedio de ventas")
-    print("5. Mostrar producto con más unidades vendidas")
-    print("6. Mostrar listado de productos")
-    print("7. Salir")
+def mostrar_listado():
+    print("Listado de ventas:")
+    for venta in ventas:
+        print(f"Fecha: {venta['fecha']}, Producto: {venta['producto']}, Cantidad: {venta['cantidad']}, Precio: {venta['precio']}, Promoción: {'Sí' if venta['promocion'] else 'No'}")
 
-def mostrar_ventas():
-    if not productos:
-        print("\nNo hay ventas registradas.")
-    else:
-        print("\n=== LISTADO DE VENTAS ===")
-        for producto in productos:
-            print(f"Producto: {producto['nombre']}, Unidades vendidas: {producto['unidades']}")
+def anadir_producto():
+    fecha = input("Ingrese la fecha (dd-mm-yyyy): ")
+    producto = input("Ingrese el nombre del producto: ")
+    cantidad = int(input("Ingrese la cantidad vendida: "))
+    precio = float(input("Ingrese el precio del producto: "))
+    promocion = input("¿El producto está en promoción? (s/n): ").lower() == 's'
+    ventas.append({"fecha": fecha, "producto": producto, "cantidad": cantidad, "precio": precio, "promocion": promocion})
+    print("Producto añadido con éxito.")
 
-def añadir_producto():
-    nombre = input("\nIngrese el nombre del producto: ")
-    while True:
-        try:
-            unidades = int(input("Ingrese las unidades vendidas: "))
-            if unidades >= 0:
-                break
-            print("Por favor, ingrese un número positivo.")
-        except ValueError:
-            print("Por favor, ingrese un número válido.")
-    
-    productos.append({'nombre': nombre, 'unidades': unidades})
-    print("Producto añadido exitosamente.")
-
-def calcular_total_ventas():
-    total = sum(producto['unidades'] for producto in productos)
-    print(f"\nTotal de unidades vendidas: {total}")
-    return total
+def calcular_suma_total():
+    suma_total = sum(venta['cantidad'] * venta['precio'] for venta in ventas)
+    print(f"La suma total de las ventas es: {suma_total:.2f}")
 
 def calcular_promedio():
-    if not productos:
-        print("\nNo hay ventas para calcular el promedio.")
-        return
-    total = calcular_total_ventas()
-    promedio = total / len(productos)
-    print(f"Promedio de ventas: {promedio:.2f}")
+    suma_total = sum(venta['cantidad'] * venta['precio'] for venta in ventas)
+    total_ventas = len(ventas)
+    promedio = suma_total / total_ventas if total_ventas > 0 else 0
+    print(f"El promedio de ventas es: {promedio:.2f}")
 
 def producto_mas_vendido():
-    if not productos:
-        print("\nNo hay productos registrados.")
+    if not ventas:
+        print("No hay productos en la lista de ventas.")
         return
-    
-    max_producto = max(productos, key=lambda x: x['unidades'])
-    print(f"\nProducto más vendido: {max_producto['nombre']} con {max_producto['unidades']} unidades")
+    producto_mas_vendido = max(ventas, key=lambda x: x['cantidad'])
+    print(f"El producto con más unidades vendidas es: {producto_mas_vendido['producto']} ({producto_mas_vendido['cantidad']} unidades)")
 
-def mostrar_productos():
-    if not productos:
-        print("\nNo hay productos registrados.")
+def mostrar_listado_productos():
+    productos = set(venta['producto'] for venta in ventas)
+    print("Listado de productos:")
+    for producto in productos:
+        print(producto)
+
+def ejecutar_opcion(opcion):
+    if opcion == "1":
+        mostrar_listado()
+    elif opcion == "2":
+        anadir_producto()
+    elif opcion == "3":
+        calcular_suma_total()
+    elif opcion == "4":
+        calcular_promedio()
+    elif opcion == "5":
+        producto_mas_vendido()
+    elif opcion == "6":
+        mostrar_listado_productos()
+    elif opcion == "7":
+        print("Saliendo del programa...")
+        return False
     else:
-        print("\n=== LISTADO DE PRODUCTOS ===")
-        for i, producto in enumerate(productos, 1):
-            print(f"{i}. {producto['nombre']}")
+        print("Opción inválida. Intente de nuevo.")
+    return True
 
+print("\nMENÚ DE OPCIONES")
+print("1. Mostrar el listado de ventas")
+print("2. Añadir un producto")
+print("3. Calcular la suma total de las ventas")
+print("4. Calcular el promedio de ventas")
+print("5. Mostrar el producto con más unidades vendidas")
+print("6. Mostrar el listado de productos")
+print("7. Salir")
 
-mostrar_menu()
-opcion = input("\nSeleccione una opción (1-7): ")
-
-if opcion == '1':
-    mostrar_ventas()
-elif opcion == '2':
-    añadir_producto()
-elif opcion == '3':
-    calcular_total_ventas()
-elif opcion == '4':
-    calcular_promedio()
-elif opcion == '5':
-    producto_mas_vendido()
-elif opcion == '6':
-    mostrar_productos()
-elif opcion == '7':
-    print("\n¡Gracias por usar el sistema!")
-else:
-    print("\nOpción no válida.")
+opcion = input("\nSeleccione una opción: ")
+ejecutar_opcion(opcion)
